@@ -3,32 +3,32 @@ import React, { Component } from 'react'
 import './App.css'
 import Header from './components/Header'
 import Admin from './components/Admin'
-import recettes from './recettes'
+import Card from './components/Card'
 
-class App extends Component {
-  state = {
-    pseudo: this.props.match.params.pseudo,
-    recettes: {}
-  }
+// Firebase
+import withFirebase from './hoc/withFirebase'
 
-  chargeRecette = () => {
-    this.setState({ recettes: recettes })
-  }
-
-  render () {
-    return (
-      <div className='box'>
-        <Header pseudo={this.state.pseudo}/>
-        <h1>Bonjour {this.state.pseudo}</h1>
-        <div className='cards'>
-          <div className='card'>
-            <h2>Une Carte</h2>
-          </div>
-        </div>
-        <Admin chargeRecette={this.chargeRecette}/>
+const App = (props) => {
+  const cards = Object.keys(props.recettes).map((key) => <Card details={props.recettes[key]} key={key} />)
+  return(
+    <div className='box'>
+      <Header pseudo={props.pseudo}/>
+      <h1>Bonjour {props.pseudo}</h1>
+      <div className='cards'>
+        {cards}
       </div>
-    )
-  }
+      <Admin 
+        ajouterRecette={props.ajouterRecette} 
+        chargeRecette={props.chargeRecette}
+        majRecette = {props.majRecette}
+        recettes = { props.recettes}
+        deleteRecette = {props.deleteRecette}
+        pseudo = {props.pseudo}
+      />
+    </div>
+  )
 }
 
-export default App
+const WrappedComponent = withFirebase(App)
+
+export default WrappedComponent
