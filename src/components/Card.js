@@ -1,4 +1,5 @@
 import React from 'react';
+import {ColorContext} from './Color'
 
 const Card = ({ details }) => {
   const ingredients = details.ingredients
@@ -24,7 +25,11 @@ const Card = ({ details }) => {
         <img src={requireImage(details.image)} alt={details.nom}/>
       </div>
       <div className="recette">
-        <h2>{details.nom}</h2>
+        <ColorContext.Consumer>
+          { context => {
+            return(<h2 style={{backgroundColor: context.state.color, color: context.state.colorText }}>{details.nom}</h2>)
+          }}
+        </ColorContext.Consumer>
         <ul className='liste-ingredients'>{ingredients}</ul>
         <ol className='liste-instructions'>{instructions}</ol>
       </div>
